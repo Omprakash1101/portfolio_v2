@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Omprakash G — Software & Data Engineer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        obsidian: '#0a0a0c', ink: '#0e0e12', smoke: '#1a1a22', ash: '#2a2a38',
+        mist: '#c8c8d8', pearl: '#e8e8f0', gold: '#c9a96e', 'gold-light': '#e8c98a',
+      },
+      fontFamily: {
+        serif: ['Cormorant Garamond','Noto Serif JP','serif'],
+        jp:    ['Noto Serif JP','serif'],
+        mono:  ['DM Mono','monospace'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  :root {
+    --gold:#c9a96e; --gold-light:#e8c98a; --pearl:#e8e8f0; --mist:#c8c8d8;
+    --smoke:#1a1a22; --ink:#0e0e12; --obsidian:#0a0a0c; --ash:#2a2a38;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--obsidian); color:var(--pearl);
+    font-family:'Cormorant Garamond','Noto Serif JP',serif;
+    cursor:none; overflow-x:hidden;
+  }
+
+  /* ── CURSOR (exact from reference) ── */
+  #cursor {
+    position:fixed; top:0; left:0; z-index:9999;
+    width:12px; height:12px; border-radius:50%;
+    background:var(--gold); pointer-events:none;
+    transform:translate(-50%,-50%);
+    transition:width .2s, height .2s, background .2s;
+    mix-blend-mode:difference;
+  }
+  #cursor-ring {
+    position:fixed; top:0; left:0; z-index:9998;
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(201,169,110,.4);
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    transition:width .3s, height .3s;
+  }
+  body:has(a:hover) #cursor,
+  body:has(button:hover) #cursor { width:20px; height:20px; background:var(--gold-light); }
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring { width:60px; height:60px; }
+
+  /* ── Noise ── */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:9000;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; opacity:.35;
+  }
+
+  ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:var(--obsidian)} ::-webkit-scrollbar-thumb{background:var(--gold)}
+
+  .lang-btn {
+    font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--mist); background:transparent; border:1px solid rgba(201,169,110,.3);
+    padding:6px 14px; cursor:none; transition:all .3s; position:relative; overflow:hidden;
+  }
+  .lang-btn::before { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-101%); transition:transform .3s ease; z-index:-1; }
+  .lang-btn:hover { color:var(--obsidian); border-color:var(--gold); }
+  .lang-btn:hover::before { transform:translateX(0); }
+
+  nav { position:fixed; top:0; width:100%; z-index:100; }
+  .nav-link {
+    font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--mist); text-decoration:none; position:relative; transition:color .3s;
+  }
+  .nav-link::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width .3s; }
+  .nav-link:hover { color:var(--gold); }
+  .nav-link:hover::after { width:100%; }
+
+  #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .bg-lines { position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .bg-line { position:absolute; width:1px; background:linear-gradient(to bottom,transparent,rgba(201,169,110,.08),transparent); animation:scanline 8s ease-in-out infinite; }
+  @keyframes scanline { 0%,100%{opacity:0;transform:translateX(-20px)} 50%{opacity:1;transform:translateX(0)} }
+
+  .hero-name { font-size: clamp(3.2rem, 8vw, 7.5rem); font-weight:300; letter-spacing:-.02em; line-height:.9; color:var(--pearl); position:relative; }
+  .hero-name .gold-accent { color:var(--gold); }
+  .hero-title-sub { font-family:'DM Mono',monospace; font-size:clamp(.65rem,1.5vw,.85rem); letter-spacing:.25em; text-transform:uppercase; color:var(--mist); }
+  .hero-jp { font-family:'Noto Serif JP',serif; font-size:clamp(1rem,2.5vw,1.8rem); font-weight:300; color:rgba(201,169,110,.5); letter-spacing:.1em; }
+
+  .gold-line { height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+
+  .section-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); }
+  .section-title { font-size:clamp(2.5rem,5vw,5rem); font-weight:300; letter-spacing:-.01em; line-height:1; }
+
+  .card { background:rgba(26,26,34,.6); border:1px solid rgba(201,169,110,.12); backdrop-filter:blur(12px); transition:border-color .4s,transform .4s; position:relative; overflow:hidden; }
+  .card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(201,169,110,.04) 0%,transparent 60%); opacity:0; transition:opacity .4s; }
+  .card:hover { border-color:rgba(201,169,110,.4); transform:translateY(-4px); }
+  .card:hover::before { opacity:1; }
+
+  .skill-pill { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.08em; padding:5px 14px; border:1px solid rgba(201,169,110,.25); color:var(--mist); transition:all .3s; display:inline-block; }
+  .skill-pill:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,169,110,.06); }
+
+  .wa-btn { display:inline-flex; align-items:center; gap:12px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--obsidian); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.15em; text-transform:uppercase; text-decoration:none; padding:16px 36px; font-weight:500; transition:all .4s; position:relative; overflow:hidden; }
+  .wa-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--gold-light),var(--gold)); opacity:0; transition:opacity .4s; }
+  .wa-btn:hover::before { opacity:1; }
+  .wa-btn:hover { transform:translateY(-2px); box-shadow:0 20px 60px rgba(201,169,110,.3); }
+  .wa-btn span { position:relative; z-index:1; }
+
+  .proj-num { font-family:'Cormorant Garamond',serif; font-size:5rem; font-weight:300; color:rgba(201,169,110,.08); line-height:1; user-select:none; }
+
+  /* Visible by default — GSAP animates fromTo */
+  .reveal,.reveal-left,.reveal-right { opacity:1; }
+
+  [data-lang="ja"] .en-text { display:none; }
+  [data-lang="en"] .ja-text { display:none; }
+  [data-lang="ja"] .section-title,
+  [data-lang="ja"] .hero-name { font-family:'Noto Serif JP',serif; }
+
+  .footer-link { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.1em; color:var(--mist); text-decoration:none; transition:color .3s; }
+  .footer-link:hover { color:var(--gold); }
+
+  #progress { position:fixed; top:0; left:0; z-index:200; height:2px; background:linear-gradient(90deg,var(--gold),var(--gold-light)); width:0%; transition:width .1s; }
+
+  .pulse-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,.5)} 50%{box-shadow:0 0 0 8px rgba(201,169,110,0)} }
+
+  .timeline-line { position:absolute; left:0; top:0; bottom:0; width:1px; background:linear-gradient(to bottom,var(--gold),transparent); }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="progress"></div>
+
+<!-- Nav -->
+<nav id="navbar" class="px-8 py-6 flex items-center justify-between backdrop-blur-md border-b border-white/5">
+  <a href="#hero" class="nav-link">OG</a>
+  <div class="flex items-center gap-5">
+    <a href="#about"          class="nav-link hidden md:block"><span class="en-text">About</span><span class="ja-text">概要</span></a>
+    <a href="#experience"     class="nav-link hidden md:block"><span class="en-text">Experience</span><span class="ja-text">経験</span></a>
+    <a href="#education"      class="nav-link hidden md:block"><span class="en-text">Education</span><span class="ja-text">学歴</span></a>
+    <a href="#projects"       class="nav-link hidden md:block"><span class="en-text">Projects</span><span class="ja-text">プロジェクト</span></a>
+    <a href="#skills"         class="nav-link hidden md:block"><span class="en-text">Skills</span><span class="ja-text">スキル</span></a>
+    <a href="#certifications" class="nav-link hidden md:block"><span class="en-text">Certs</span><span class="ja-text">資格</span></a>
+    <a href="#contact"        class="nav-link hidden md:block"><span class="en-text">Contact</span><span class="ja-text">連絡</span></a>
+    <button class="lang-btn" id="langToggle">
+      <span class="en-text">日本語</span><span class="ja-text">English</span>
+    </button>
+  </div>
+</nav>
+<!-- HERO -->
+<section id="hero">
+  <div class="bg-lines">
+    <div class="bg-line" style="left:15%;height:80%;top:10%;animation-delay:0s;"></div>
+    <div class="bg-line" style="left:35%;height:60%;top:20%;animation-delay:1.5s;"></div>
+    <div class="bg-line" style="left:55%;height:90%;top:5%;animation-delay:3s;"></div>
+    <div class="bg-line" style="left:75%;height:70%;top:15%;animation-delay:2s;"></div>
+    <div class="bg-line" style="left:90%;height:50%;top:25%;animation-delay:4s;"></div>
+  </div>
+  <div class="relative z-10 text-center px-6 max-w-7xl mx-auto">
+    <div class="flex items-center justify-center gap-3 mb-12" id="hero-status">
+      <div class="pulse-dot"></div>
+      <span class="font-mono text-xs tracking-widest text-mist uppercase">
+        <span class="en-text">Available for Opportunities</span>
+        <span class="ja-text">機会を求めています</span>
+      </span>
+    </div>
+    <div class="hero-name mb-6" id="hero-name">
+      <div>
+        <span class="en-text">Omprakash</span>
+        <span class="ja-text">オムプラカッシュ</span>
+      </div>
+      <div>
+        <span class="en-text"><span class="gold-accent">G</span></span>
+        <span class="ja-text"><span class="gold-accent">ジ</span></span>
+      </div>
+    </div>
+    <div class="hero-jp mb-8" id="hero-jp">
+      <span class="en-text">「オンプラカッシュ・ジ」</span>
+      <span class="ja-text">「Omprakash・G」</span>
+    </div>
+    <div class="hero-title-sub mb-16" id="hero-sub">
+      <span class="en-text">Software & Data Engineer · AI Systems · Chennai, India</span>
+      <span class="ja-text">ソフトウェア＆データエンジニア · AIシステム · チェンナイ、インド</span>
+    </div>
+    <div class="flex flex-col items-center gap-2 animate-bounce opacity-50" id="hero-scroll">
+      <span class="font-mono text-xs tracking-widest text-mist"><span class="en-text">scroll</span><span class="ja-text">スクロール</span></span>
+      <svg width="20" height="30" viewBox="0 0 20 30" fill="none">
+        <rect x="7.5" y="2" width="5" height="10" rx="2.5" stroke="#c9a96e" stroke-width="1"/>
+        <circle cx="10" cy="6" r="1.5" fill="#c9a96e"/>
+        <path d="M5 22l5 6 5-6" stroke="#c9a96e" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line mx-16 reveal"></div>
+
+<!-- ABOUT -->
+<section id="about" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="grid md:grid-cols-2 gap-20 items-center">
+    <div>
+      <div class="section-label mb-4 reveal-left"><span class="en-text">01 — About</span><span class="ja-text">01 — 概要</span></div>
+      <h2 class="section-title mb-8 reveal-left">
+        <span class="en-text">Crafting<br/><em class="text-gold">Intelligent</em><br/>Systems</span>
+        <span class="ja-text">知的な<br/><em class="text-gold">システム</em>を<br/>構築する</span>
+      </h2>
+      <div class="gold-line w-24 mb-8 reveal-left"></div>
+      <p class="text-mist leading-relaxed text-lg font-light reveal-left">
+        <span class="en-text">Innovative Software and Data Engineer specializing in AI-powered applications and microservices. Proficient in Python with expertise in Django, LangChain, NumPy, Pandas, PySpark and GCP. Competitive coder with <span class="text-gold font-semibold">450+ LeetCode problems</span> solved.</span>
+        <span class="ja-text">AIアプリとマイクロサービスを専門とするエンジニア。LeetCodeで<span class="text-gold font-semibold">450問以上</span>解いた競技プログラマー。</span>
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-4 reveal-right">
+      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">450+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">LeetCode Problems</span><span class="ja-text">LeetCode問題</span></div></div>
+      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">3+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Projects Deployed</span><span class="ja-text">プロジェクト</span></div></div>
+      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">7.88</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">CGPA / 10</span><span class="ja-text">GPA / 10</span></div></div>
+      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">4</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Languages Spoken</span><span class="ja-text">話せる言語</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">02 — Experience</span><span class="ja-text">02 — 経験</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Professional<br/><em class="text-gold">Journey</em></span><span class="ja-text">プロの<br/><em class="text-gold">旅路</em></span></h2>
+  <div class="relative pl-8">
+    <div class="timeline-line"></div>
+    <div class="card p-10 reveal ml-4">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+        <div>
+          <div class="font-mono text-xs text-gold tracking-widest uppercase mb-2">Dec 2024 — Jan 2025</div>
+          <h3 class="text-2xl font-light text-pearl"><span class="en-text">AI/ML Intern</span><span class="ja-text">AI/MLインターン</span></h3>
+          <div class="text-mist font-light">Widezo Pvt Ltd, Puducherry</div>
+        </div>
+        <a href="https://tickets-v1.streamlit.app" target="_blank" class="font-mono text-xs text-gold tracking-wider border border-gold/30 px-4 py-2 hover:border-gold transition-colors"><span class="en-text">↗ Live Demo</span><span class="ja-text">↗ デモを見る</span></a>
+      </div>
+      <p class="text-mist leading-relaxed font-light">
+        <span class="en-text">Developed a RAG-powered AI messaging bot processing <span class="text-gold">30K+ weekly emails</span>, improving communication efficiency by <span class="text-gold">50–80%</span> using LangChain and Google Generative AI.</span>
+        <span class="ja-text">LangChainとGoogle Generative AIを用いたRAG搭載AIボットを開発。週<span class="text-gold">3万件以上のメール</span>を処理し効率を<span class="text-gold">50〜80%</span>向上。</span>
+      </p>
+      <div class="flex flex-wrap gap-2 mt-6">
+        <span class="skill-pill">LangChain</span><span class="skill-pill">Google Generative AI</span><span class="skill-pill">RAG</span><span class="skill-pill">Ollama</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">03 — Education</span><span class="ja-text">03 — 学歴</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Academic<br/><em class="text-gold">Foundation</em></span><span class="ja-text">学術的な<br/><em class="text-gold">基盤</em></span></h2>
+  <div class="card p-10 reveal">
+    <div class="flex flex-wrap items-start justify-between gap-6 mb-8">
+      <div>
+        <div class="font-mono text-xs text-gold tracking-widest uppercase mb-3">Nov 2022 — Mar 2026</div>
+        <h3 class="text-3xl font-light text-pearl mb-2"><span class="en-text">Bachelor of Technology</span><span class="ja-text">工学士（情報技術）</span></h3>
+        <div class="text-xl text-mist font-light mb-1"><span class="en-text">Information Technology</span><span class="ja-text">情報技術学科</span></div>
+        <div class="text-mist font-light opacity-70">Easwari Engineering College, Chennai, India</div>
+      </div>
+      <div class="text-center">
+        <div class="text-5xl font-light text-gold mb-1">7.88</div>
+        <div class="font-mono text-xs text-mist tracking-widest uppercase">CGPA / 10</div>
+      </div>
+    </div>
+    <div class="gold-line mb-8"></div>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="flex gap-4 items-start">
+        <div class="text-gold mt-1 shrink-0">◆</div>
+        <div>
+          <div class="font-mono text-xs text-gold tracking-widest uppercase mb-1">Oct 2023 — Oct 2024</div>
+          <div class="text-pearl font-light"><span class="en-text">Ex-Associate Internship Member</span><span class="ja-text">元インターンシップ準会員</span></div>
+          <div class="text-mist text-sm font-light mt-1"><span class="en-text">Student Association Club of IT Department</span><span class="ja-text">IT学科学生協会</span></div>
+        </div>
+      </div>
+      <div class="flex gap-4 items-start">
+        <div class="text-gold mt-1 shrink-0">◆</div>
+        <div>
+          <div class="font-mono text-xs text-gold tracking-widest uppercase mb-1"><span class="en-text">Present</span><span class="ja-text">現在</span></div>
+          <div class="text-pearl font-light"><span class="en-text">Volunteer Member — NSS Unit</span><span class="ja-text">NSS部門ボランティア会員</span></div>
+          <div class="text-mist text-sm font-light mt-1"><span class="en-text">Easwari Engineering College</span><span class="ja-text">イースワリ工科大学</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">04 — Projects</span><span class="ja-text">04 — プロジェクト</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Selected<br/><em class="text-gold">Works</em></span><span class="ja-text">厳選された<br/><em class="text-gold">作品</em></span></h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-10 reveal-left">
+      <div class="flex items-start justify-between mb-6">
+        <div class="proj-num">01</div>
+        <a href="https://code-visualizer-pearl.vercel.app" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+      </div>
+      <h3 class="text-2xl font-light text-pearl mb-3"><span class="en-text">Code Visualizer</span><span class="ja-text">コードビジュアライザー</span></h3>
+      <div class="font-mono text-xs text-gold tracking-wider mb-4">Nov 2025 — Present</div>
+      <p class="text-mist leading-relaxed font-light mb-6"><span class="en-text">Interactive platform that visually explains program execution, improving debugging efficiency and algorithm comprehension.</span><span class="ja-text">プログラムの実行を視覚的に説明するインタラクティブなプラットフォーム。</span></p>
+      <div class="flex flex-wrap gap-2"><span class="skill-pill">React</span><span class="skill-pill">Django</span><span class="skill-pill">GitHub Actions</span></div>
+    </div>
+
+    <div class="card p-10 reveal-right">
+      <div class="flex items-start justify-between mb-6">
+        <div class="proj-num">02</div>
+        <a href="https://colab.research.google.com/drive/1irdqZmhPT0hYSBK7wvwm9_m0mTguTWts?usp=sharing" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+      </div>
+      <h3 class="text-2xl font-light text-pearl mb-3"><span class="en-text">Healthcare Fraud Detection</span><span class="ja-text">医療不正検出システム</span></h3>
+      <div class="font-mono text-xs text-gold tracking-wider mb-4">Nov 2025</div>
+      <p class="text-mist leading-relaxed font-light mb-6"><span class="en-text">Ensemble ML system detecting fraudulent healthcare providers using SMOTEENN and XGBoost, achieving <span class="text-gold">~0.95 AUC</span>.</span><span class="ja-text">SMOTEENNとXGBoostによる不正検出。AUCスコア<span class="text-gold">約0.95</span>達成。</span></p>
+      <div class="flex flex-wrap gap-2"><span class="skill-pill">Scikit-learn</span><span class="skill-pill">XGBoost</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span></div>
+    </div>
+
+    <div class="card p-10 md:col-span-2 reveal">
+      <div class="flex items-start justify-between mb-6">
+        <div class="proj-num">03</div>
+        <a href="https://github.com/Omprakash1101/Delivery_Duration_Prediction" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-2xl font-light text-pearl mb-3"><span class="en-text">Delivery Duration Prediction</span><span class="ja-text">配達時間予測</span></h3>
+          <div class="font-mono text-xs text-gold tracking-wider mb-4">Jun — Jul 2025</div>
+          <p class="text-mist leading-relaxed font-light"><span class="en-text">Delivery duration prediction using PySpark and EDA on large historical datasets in Databricks.</span><span class="ja-text">DatabricksでPySparkを用いた配達時間予測システム。</span></p>
+        </div>
+        <div class="flex flex-wrap gap-2 content-start"><span class="skill-pill">PySpark</span><span class="skill-pill">Databricks</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">GitHub</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">05 — Skills</span><span class="ja-text">05 — スキル</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Technical<br/><em class="text-gold">Arsenal</em></span><span class="ja-text">技術的な<br/><em class="text-gold">スキル</em></span></h2>
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="reveal-left"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Languages</span><span class="ja-text">プログラミング言語</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">Python (Advanced)</span><span class="skill-pill">Java (Intermediate)</span></div></div>
+    <div class="reveal"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Big Data & ML</span><span class="ja-text">ビッグデータ & ML</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">PySpark</span><span class="skill-pill">TensorFlow</span><span class="skill-pill">Scikit-learn</span><span class="skill-pill">LangChain</span></div></div>
+    <div class="reveal-right"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Frontend & Backend</span><span class="ja-text">フロント & バックエンド</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">ReactJS</span><span class="skill-pill">Django</span><span class="skill-pill">HTML/CSS</span></div></div>
+    <div class="reveal-left"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Cloud & Tools</span><span class="ja-text">クラウド & ツール</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">GCP</span><span class="skill-pill">Docker</span><span class="skill-pill">GitHub Actions</span><span class="skill-pill">Databricks</span><span class="skill-pill">Postman</span><span class="skill-pill">Google Colab</span></div></div>
+    <div class="reveal"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Databases</span><span class="ja-text">データベース</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span><span class="skill-pill">Firebase</span></div></div>
+    <div class="reveal-right"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Languages Spoken</span><span class="ja-text">話せる言語</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">English</span><span class="skill-pill">Tamil</span><span class="skill-pill">Telugu (Native)</span><span class="skill-pill">日本語</span></div></div>
+  </div>
+  <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+    <div class="card p-6 text-center"><div class="text-2xl mb-2">🇬🇧</div><div class="text-pearl font-light">English</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Fluent</span><span class="ja-text">流暢</span></div></div>
+    <div class="card p-6 text-center"><div class="text-2xl mb-2">🇮🇳</div><div class="text-pearl font-light">Tamil</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Fluent</span><span class="ja-text">流暢</span></div></div>
+    <div class="card p-6 text-center"><div class="text-2xl mb-2">🇮🇳</div><div class="text-pearl font-light">Telugu</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Native</span><span class="ja-text">母国語</span></div></div>
+    <div class="card p-6 text-center"><div class="text-2xl mb-2">🇯🇵</div><div class="text-pearl font-light">日本語</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Beginner</span><span class="ja-text">初心者</span></div></div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">06 — Certifications</span><span class="ja-text">06 — 認定資格</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Credentials &amp;<br/><em class="text-gold">Accolades</em></span><span class="ja-text">資格と<br/><em class="text-gold">実績</em></span></h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-10 reveal-left">
+      <div style="position:absolute;top:-10px;right:10px;font-size:6rem;font-family:'Cormorant Garamond',serif;font-weight:300;color:rgba(201,169,110,.05);user-select:none;line-height:1;pointer-events:none;">✦</div>
+      <div class="font-mono text-xs text-gold tracking-widest uppercase mb-4">Oct 2025</div>
+      <h3 class="text-2xl font-light text-pearl mb-2"><span class="en-text">Data Analytics Job Simulation</span><span class="ja-text">データ分析ジョブシミュレーション</span></h3>
+      <div class="text-mist font-light mb-6"><span class="en-text">Issued by Deloitte · via Forage</span><span class="ja-text">Deloitte発行 · Forage経由</span></div>
+      <div class="gold-line mb-6"></div>
+      <div class="flex items-center gap-3"><span class="font-mono text-xs text-ash tracking-widest uppercase"><span class="en-text">Credential ID</span><span class="ja-text">資格ID</span></span><span class="font-mono text-xs text-gold">QE6bx5RDs9N2KFfod</span></div>
+    </div>
+    <div class="card p-10 reveal-right">
+      <div style="position:absolute;top:-10px;right:10px;font-size:6rem;font-family:'Cormorant Garamond',serif;font-weight:300;color:rgba(201,169,110,.05);user-select:none;line-height:1;pointer-events:none;">✦</div>
+      <div class="font-mono text-xs text-gold tracking-widest uppercase mb-4">Aug 2025</div>
+      <h3 class="text-2xl font-light text-pearl mb-2"><span class="en-text">SQL (Advanced)</span><span class="ja-text">SQL（上級）</span></h3>
+      <div class="text-mist font-light mb-6"><span class="en-text">HackerRank Certification</span><span class="ja-text">HackerRank認定資格</span></div>
+      <div class="gold-line mb-6"></div>
+      <div class="flex items-center gap-3"><span class="font-mono text-xs text-ash tracking-widest uppercase"><span class="en-text">Credential ID</span><span class="ja-text">資格ID</span></span><span class="font-mono text-xs text-gold">94D54CBB8A3C</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="gold-line mb-16 reveal"></div>
+  <div class="section-label mb-4 reveal"><span class="en-text">07 — Contact</span><span class="ja-text">07 — 連絡</span></div>
+  <h2 class="section-title mb-8 reveal">
+    <span class="en-text">Let's Build<br/>Something<br/><em class="text-gold">Remarkable</em></span>
+    <span class="ja-text">一緒に<br/>素晴らしいものを<br/><em class="text-gold">作りましょう</em></span>
+  </h2>
+  <p class="text-mist text-xl font-light leading-relaxed mb-16 max-w-xl reveal">
+    <span class="en-text">Open to internships, collaborations, and full-time roles. Reach out directly — I respond within 24 hours.</span>
+    <span class="ja-text">インターンシップ、コラボレーション、フルタイムのポジションに興味があります。24時間以内に返信いたします。</span>
+  </p>
+  <div class="flex flex-wrap gap-6 items-center reveal">
+    <a href="https://wa.me/919043195369?text=Hi%20Omprakash%2C%20I%20came%20across%20your%20portfolio%20and%20would%20love%20to%20connect!" target="_blank" class="wa-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="position:relative;z-index:1"><path d="M12.036 5.339c-3.635 0-6.591 2.956-6.592 6.591-.001 1.162.303 2.296.88 3.291L5.28 18.68l3.57-1.023a6.578 6.578 0 003.186.814h.003c3.635 0 6.591-2.956 6.592-6.591 0-1.76-.686-3.414-1.931-4.659a6.557 6.557 0 00-4.664-1.882zm0 12.026h-.002a5.463 5.463 0 01-2.783-.761l-.2-.118-2.07.594.577-2.116-.13-.217a5.452 5.452 0 01-.835-2.907c.001-3.012 2.453-5.463 5.468-5.463 1.459.001 2.83.57 3.863 1.604a5.432 5.432 0 011.598 3.861c-.001 3.012-2.452 5.463-5.486 5.463zm2.997-4.09c-.164-.082-1.13-.557-1.305-.621-.176-.064-.303-.096-.43.096-.128.192-.495.622-.607.749-.112.128-.224.144-.41.048-.184-.096-.779-.287-1.484-.916a5.573 5.573 0 01-1.028-1.28c-.107-.192-.011-.295.081-.39.083-.085.192-.224.288-.336.096-.112.128-.192.192-.32.064-.128.032-.24-.016-.336-.048-.096-.43-1.04-.588-1.424-.155-.374-.312-.323-.43-.329-.112-.006-.24-.008-.368-.008a.706.706 0 00-.512.24c-.176.192-.672.657-.672 1.6s.688 1.857.784 1.985c.096.128 1.354 2.068 3.28 2.898.458.198.816.316 1.095.404.46.147.879.126 1.21.077.37-.056 1.13-.462 1.29-.908.16-.447.16-.83.112-.909-.048-.079-.176-.127-.368-.223z"/></svg>
+      <span><span class="en-text">Message on WhatsApp</span><span class="ja-text">WhatsAppで連絡</span></span>
+    </a>
+    <a href="mailto:omprakashgopi2k05@gmail.com" class="font-mono text-sm text-mist border-b border-mist/30 pb-1 hover:text-gold hover:border-gold transition-all">omprakashgopi2k05@gmail.com</a>
+  </div>
+  <div class="flex flex-wrap gap-6 mt-12 reveal">
+    <a href="https://github.com/Omprakash1101" target="_blank" class="footer-link flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+    <a href="https://linkedin.com/in/omprakash-g-a8a906244" target="_blank" class="footer-link flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    <a href="https://leetcode.com/u/Omprakash_11" target="_blank" class="footer-link flex items-center gap-2"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>LeetCode</a>
+    <a href="tel:+919043195369" class="footer-link flex items-center gap-2"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>+91 904 319 5369</a>
+  </div>
+</section>
+
+<footer class="border-t border-white/5 px-8 md:px-20 py-8 flex flex-wrap items-center justify-between gap-4">
+  <div class="font-mono text-xs text-ash tracking-widest">
+    <span class="en-text">© 2026 Omprakash G — Designed with Precision</span>
+    <span class="ja-text">© 2026 オンプラカッシュ・ジ — 精密に設計</span>
+  </div>
+  <div class="font-mono text-xs text-ash">Chennai, India 🇮🇳</div>
+</footer>
+
+<script>
+  window.addEventListener("load", () => {
+  const navHeight = document.getElementById("navbar").offsetHeight;
+});
+
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+window.addEventListener("load", () => {
+  const navHeight = document.getElementById("navbar").offsetHeight;
+  document.getElementById("hero").style.paddingTop = navHeight + "px";
+  window.scrollTo(0, 0);
+});
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// ── Cursor — exact pattern from reference ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  gsap.to(cursor, { x: mouseX, y: mouseY, duration: 0 });
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.1;
+  ringY += (mouseY - ringY) * 0.1;
+  ring.style.left = ringX + 'px';
+  ring.style.top  = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+// ── Scroll Progress ──
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+// ── Hero entrance ──
+const tl = gsap.timeline();
+tl.from('#hero-status', { y:30, opacity:0, duration:.8, ease:'power3.out', delay:.3 })
+  .from('#hero-name',   { y:60, opacity:0, duration:1.2, ease:'power3.out' }, '-=.4')
+  .from('#hero-jp',     { y:20, opacity:0, duration:.8,  ease:'power3.out' }, '-=.6')
+  .from('#hero-sub',    { y:20, opacity:0, duration:.8,  ease:'power3.out' }, '-=.5')
+  .from('#hero-scroll', { y:20, opacity:0, duration:.6,  ease:'power3.out' }, '-=.3');
+
+// ── Scroll reveals ──
+gsap.utils.toArray('.reveal').forEach(el => {
+  gsap.fromTo(el, { y:30, opacity:0 }, { scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}, y:0, opacity:1, duration:.9, ease:'power3.out' });
+});
+gsap.utils.toArray('.reveal-left').forEach(el => {
+  gsap.fromTo(el, { x:-40, opacity:0 }, { scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}, x:0, opacity:1, duration:.9, ease:'power3.out' });
+});
+gsap.utils.toArray('.reveal-right').forEach(el => {
+  gsap.fromTo(el, { x:40, opacity:0 }, { scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}, x:0, opacity:1, duration:.9, ease:'power3.out' });
+});
+
+// Fallback visibility after 1.5s
+setTimeout(() => {
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+    el.style.opacity = '1'; el.style.transform = 'none';
+  });
+}, 1500);
+
+// ── Language toggle ──
+const html = document.documentElement;
+document.getElementById('langToggle').addEventListener('click', () => {
+  html.setAttribute('data-lang', html.getAttribute('data-lang') === 'en' ? 'ja' : 'en');
+  gsap.from('body', { opacity:.7, duration:.3, ease:'power2.out' });
+});
+
+// ── Smooth scroll ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) gsap.to(window, { duration:1.2, scrollTo:{y:t}, ease:'power3.inOut' });
+  });
+});
+
+// ── Hide scroll hint ──
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 100) gsap.to('#hero-scroll', { opacity:0, duration:.3 });
+});
+
+// ── Parallax ──
+document.addEventListener('mousemove', e => {
+  const xPos = (e.clientX / window.innerWidth  - .5) * 20;
+  const yPos = (e.clientY / window.innerHeight - .5) * 10;
+  gsap.to('#hero-name', { x:xPos,      y:yPos,      duration:1.5, ease:'power1.out' });
+  gsap.to('#hero-jp',   { x:xPos * .5, y:yPos * .5, duration:1.5, ease:'power1.out' });
+});
+</script>
+</body>
+</html>
