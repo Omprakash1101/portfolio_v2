@@ -41,8 +41,14 @@ tailwind.config = {
   body {
     background:var(--obsidian); color:var(--pearl);
     font-family:'Cormorant Garamond','Noto Serif JP',serif;
-    cursor:none; overflow-x:hidden;
+    overflow-x:hidden;
   }
+
+  *,
+*::before,
+*::after {
+  cursor: none !important;
+}
 
   /* ── CURSOR (exact from reference) ── */
   #cursor {
@@ -154,10 +160,11 @@ tailwind.config = {
   <a href="#hero" class="nav-link">OG</a>
   <div class="flex items-center gap-5">
     <a href="#about"          class="nav-link hidden md:block"><span class="en-text">About</span><span class="ja-text">概要</span></a>
-    <a href="#experience"     class="nav-link hidden md:block"><span class="en-text">Experience</span><span class="ja-text">経験</span></a>
     <a href="#education"      class="nav-link hidden md:block"><span class="en-text">Education</span><span class="ja-text">学歴</span></a>
+    <a href="#experience"     class="nav-link hidden md:block"><span class="en-text">Experience</span><span class="ja-text">経験</span></a>
     <a href="#projects"       class="nav-link hidden md:block"><span class="en-text">Projects</span><span class="ja-text">プロジェクト</span></a>
     <a href="#skills"         class="nav-link hidden md:block"><span class="en-text">Skills</span><span class="ja-text">スキル</span></a>
+    <a href="#Languages"      class="nav-link hidden md:block"><span class="en-text">Languages</span><span class="ja-text">言語</span></a>
     <a href="#certifications" class="nav-link hidden md:block"><span class="en-text">Certs</span><span class="ja-text">資格</span></a>
     <a href="#contact"        class="nav-link hidden md:block"><span class="en-text">Contact</span><span class="ja-text">連絡</span></a>
     <button class="lang-btn" id="langToggle">
@@ -197,7 +204,7 @@ tailwind.config = {
       <span class="ja-text">「Omprakash・G」</span>
     </div>
     <div class="hero-title-sub mb-16" id="hero-sub">
-      <span class="en-text">Software & Data Engineer · AI Systems · Chennai, India</span>
+      <span class="en-text">Software & Data Engineer · AI Developer · Chennai, India</span>
       <span class="ja-text">ソフトウェア＆データエンジニア · AIシステム · チェンナイ、インド</span>
     </div>
     <div class="flex flex-col items-center gap-2 animate-bounce opacity-50" id="hero-scroll">
@@ -229,43 +236,17 @@ tailwind.config = {
       </p>
     </div>
     <div class="grid grid-cols-2 gap-4 reveal-right">
-      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">450+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">LeetCode Problems</span><span class="ja-text">LeetCode問題</span></div></div>
-      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">3+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Projects Deployed</span><span class="ja-text">プロジェクト</span></div></div>
-      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">7.88</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">CGPA / 10</span><span class="ja-text">GPA / 10</span></div></div>
-      <div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">4</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Languages Spoken</span><span class="ja-text">話せる言語</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
-  <div class="section-label mb-4 reveal"><span class="en-text">02 — Experience</span><span class="ja-text">02 — 経験</span></div>
-  <h2 class="section-title mb-16 reveal"><span class="en-text">Professional<br/><em class="text-gold">Journey</em></span><span class="ja-text">プロの<br/><em class="text-gold">旅路</em></span></h2>
-  <div class="relative pl-8">
-    <div class="timeline-line"></div>
-    <div class="card p-10 reveal ml-4">
-      <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
-        <div>
-          <div class="font-mono text-xs text-gold tracking-widest uppercase mb-2">Dec 2024 — Jan 2025</div>
-          <h3 class="text-2xl font-light text-pearl"><span class="en-text">AI/ML Intern</span><span class="ja-text">AI/MLインターン</span></h3>
-          <div class="text-mist font-light">Widezo Pvt Ltd, Puducherry</div>
-        </div>
-        <a href="https://tickets-v1.streamlit.app" target="_blank" class="font-mono text-xs text-gold tracking-wider border border-gold/30 px-4 py-2 hover:border-gold transition-colors"><span class="en-text">↗ Live Demo</span><span class="ja-text">↗ デモを見る</span></a>
-      </div>
-      <p class="text-mist leading-relaxed font-light">
-        <span class="en-text">Developed a RAG-powered AI messaging bot processing <span class="text-gold">30K+ weekly emails</span>, improving communication efficiency by <span class="text-gold">50–80%</span> using LangChain and Google Generative AI.</span>
-        <span class="ja-text">LangChainとGoogle Generative AIを用いたRAG搭載AIボットを開発。週<span class="text-gold">3万件以上のメール</span>を処理し効率を<span class="text-gold">50〜80%</span>向上。</span>
-      </p>
-      <div class="flex flex-wrap gap-2 mt-6">
-        <span class="skill-pill">LangChain</span><span class="skill-pill">Google Generative AI</span><span class="skill-pill">RAG</span><span class="skill-pill">Ollama</span>
-      </div>
+      <a href="https://leetcode.com/u/Omprakash_11"><div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">450+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">LeetCode Problems</span><span class="ja-text">LeetCode問題</span></div></div></a>
+      <a href="#projects"><div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">3+</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Projects Deployed</span><span class="ja-text">プロジェクト</span></div></div></a>
+      <a href="#education"><div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">7.88</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">CGPA / 10</span><span class="ja-text">GPA / 10</span></div></div></a>
+      <a href="#Languages"><div class="card p-8 text-center"><div class="text-5xl font-light text-gold mb-2">4</div><div class="font-mono text-xs tracking-widest text-mist uppercase"><span class="en-text">Languages Spoken</span><span class="ja-text">話せる言語</span></div></div></a>
     </div>
   </div>
 </section>
 
 <!-- EDUCATION -->
 <section id="education" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
-  <div class="section-label mb-4 reveal"><span class="en-text">03 — Education</span><span class="ja-text">03 — 学歴</span></div>
+  <div class="section-label mb-4 reveal"><span class="en-text">02 — Education</span><span class="ja-text">02 — 学歴</span></div>
   <h2 class="section-title mb-16 reveal"><span class="en-text">Academic<br/><em class="text-gold">Foundation</em></span><span class="ja-text">学術的な<br/><em class="text-gold">基盤</em></span></h2>
   <div class="card p-10 reveal">
     <div class="flex flex-wrap items-start justify-between gap-6 mb-8">
@@ -302,37 +283,66 @@ tailwind.config = {
   </div>
 </section>
 
+<!-- EXPERIENCE -->
+<section id="experience" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+  <div class="section-label mb-4 reveal"><span class="en-text">03 — Experience</span><span class="ja-text">03 — 経験</span></div>
+  <h2 class="section-title mb-16 reveal"><span class="en-text">Professional<br/><em class="text-gold">Journey</em></span><span class="ja-text">プロの<br/><em class="text-gold">旅路</em></span></h2>
+  <div class="relative pl-8">
+    <div class="timeline-line"></div>
+    <a href="https://tickets-v1.streamlit.app" class="font-mono text-xs text-gold tracking-wider border border-gold/30 hover:border-gold transition-colors">
+    <div class="card p-10 reveal ml-4">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+        <div>
+          <div class="font-mono text-xs text-gold tracking-widest uppercase mb-2">Dec 2024 — Jan 2025</div>
+          <h3 class="text-2xl font-light text-pearl"><span class="en-text">AI/ML Intern</span><span class="ja-text">AI/MLインターン</span></h3>
+          <div class="text-mist font-light">Widezo Pvt Ltd, Puducherry</div>
+        </div>
+        <span class="en-text">↗ Live Demo</span><span class="ja-text">↗ デモを見る</span>
+      </div>
+      <p class="text-mist leading-relaxed font-light">
+        <span class="en-text">Developed a RAG-powered AI messaging bot processing <span class="text-gold">30K+ weekly emails</span>, improving communication efficiency by <span class="text-gold">50–80%</span> using LangChain and Google Generative AI.</span>
+        <span class="ja-text">LangChainとGoogle Generative AIを用いたRAG搭載AIボットを開発。週<span class="text-gold">3万件以上のメール</span>を処理し効率を<span class="text-gold">50〜80%</span>向上。</span>
+      </p>
+      <div class="flex flex-wrap gap-2 mt-6">
+        <span class="skill-pill">LangChain</span><span class="skill-pill">Google Generative AI</span><span class="skill-pill">RAG</span><span class="skill-pill">Ollama</span>
+      </div>
+    </div></a>
+  </div>
+</section>
+
+
 <!-- PROJECTS -->
 <section id="projects" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
   <div class="section-label mb-4 reveal"><span class="en-text">04 — Projects</span><span class="ja-text">04 — プロジェクト</span></div>
   <h2 class="section-title mb-16 reveal"><span class="en-text">Selected<br/><em class="text-gold">Works</em></span><span class="ja-text">厳選された<br/><em class="text-gold">作品</em></span></h2>
   <div class="grid md:grid-cols-2 gap-6">
-    <div class="card p-10 reveal-left">
+    <a href="https://code-visualizer-pearl.vercel.app" class="font-mono text-xs text-gold tracking-wider border border-gold/30 hover:border-gold transition-colors card p-10 reveal-left">
       <div class="flex items-start justify-between mb-6">
         <div class="proj-num">01</div>
-        <a href="https://code-visualizer-pearl.vercel.app" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
       </div>
       <h3 class="text-2xl font-light text-pearl mb-3"><span class="en-text">Code Visualizer</span><span class="ja-text">コードビジュアライザー</span></h3>
       <div class="font-mono text-xs text-gold tracking-wider mb-4">Nov 2025 — Present</div>
       <p class="text-mist leading-relaxed font-light mb-6"><span class="en-text">Interactive platform that visually explains program execution, improving debugging efficiency and algorithm comprehension.</span><span class="ja-text">プログラムの実行を視覚的に説明するインタラクティブなプラットフォーム。</span></p>
       <div class="flex flex-wrap gap-2"><span class="skill-pill">React</span><span class="skill-pill">Django</span><span class="skill-pill">GitHub Actions</span></div>
-    </div>
+    </a>
 
-    <div class="card p-10 reveal-right">
+    <a href="https://colab.research.google.com/drive/1irdqZmhPT0hYSBK7wvwm9_m0mTguTWts?usp=sharing" class="font-mono text-xs text-gold tracking-wider border border-gold/30 hover:border-gold transition-colors card p-10 reveal-right">
       <div class="flex items-start justify-between mb-6">
         <div class="proj-num">02</div>
-        <a href="https://colab.research.google.com/drive/1irdqZmhPT0hYSBK7wvwm9_m0mTguTWts?usp=sharing" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
       </div>
       <h3 class="text-2xl font-light text-pearl mb-3"><span class="en-text">Healthcare Fraud Detection</span><span class="ja-text">医療不正検出システム</span></h3>
       <div class="font-mono text-xs text-gold tracking-wider mb-4">Nov 2025</div>
       <p class="text-mist leading-relaxed font-light mb-6"><span class="en-text">Ensemble ML system detecting fraudulent healthcare providers using SMOTEENN and XGBoost, achieving <span class="text-gold">~0.95 AUC</span>.</span><span class="ja-text">SMOTEENNとXGBoostによる不正検出。AUCスコア<span class="text-gold">約0.95</span>達成。</span></p>
+      <br/>
       <div class="flex flex-wrap gap-2"><span class="skill-pill">Scikit-learn</span><span class="skill-pill">XGBoost</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span></div>
-    </div>
+    </a>
 
-    <div class="card p-10 md:col-span-2 reveal">
+    <a href="https://github.com/Omprakash1101/Delivery_Duration_Prediction" class="font-mono text-xs text-gold tracking-wider border border-gold/30 hover:border-gold transition-colors card p-10 md:col-span-2 reveal">  
       <div class="flex items-start justify-between mb-6">
         <div class="proj-num">03</div>
-        <a href="https://github.com/Omprakash1101/Delivery_Duration_Prediction" target="_blank" class="text-gold hover:text-gold-light transition-colors"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
       </div>
       <div class="grid md:grid-cols-2 gap-8">
         <div>
@@ -342,7 +352,7 @@ tailwind.config = {
         </div>
         <div class="flex flex-wrap gap-2 content-start"><span class="skill-pill">PySpark</span><span class="skill-pill">Databricks</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">GitHub</span></div>
       </div>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -356,8 +366,11 @@ tailwind.config = {
     <div class="reveal-right"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Frontend & Backend</span><span class="ja-text">フロント & バックエンド</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">ReactJS</span><span class="skill-pill">Django</span><span class="skill-pill">HTML/CSS</span></div></div>
     <div class="reveal-left"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Cloud & Tools</span><span class="ja-text">クラウド & ツール</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">GCP</span><span class="skill-pill">Docker</span><span class="skill-pill">GitHub Actions</span><span class="skill-pill">Databricks</span><span class="skill-pill">Postman</span><span class="skill-pill">Google Colab</span></div></div>
     <div class="reveal"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Databases</span><span class="ja-text">データベース</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span><span class="skill-pill">Firebase</span></div></div>
-    <div class="reveal-right"><div class="font-mono text-xs text-gold tracking-widest uppercase mb-6"><span class="en-text">Languages Spoken</span><span class="ja-text">話せる言語</span></div><div class="flex flex-wrap gap-2"><span class="skill-pill">English</span><span class="skill-pill">Tamil</span><span class="skill-pill">Telugu (Native)</span><span class="skill-pill">日本語</span></div></div>
   </div>
+  </section>
+  <section id="Languages" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
+      <div class="section-label mb-4 reveal"><span class="en-text">06 — Languages</span><span class="ja-text">06 — 言語</span></div>
+    <h2 class="section-title mb-16 reveal"><span class="en-text">Spoken<br/><em class="text-gold">Languages</em></span><span class="ja-text">話せる<br/><em class="text-gold">言語</em></span></h2>
   <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
     <div class="card p-6 text-center"><div class="text-2xl mb-2">🇬🇧</div><div class="text-pearl font-light">English</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Fluent</span><span class="ja-text">流暢</span></div></div>
     <div class="card p-6 text-center"><div class="text-2xl mb-2">🇮🇳</div><div class="text-pearl font-light">Tamil</div><div class="font-mono text-xs text-gold tracking-wider mt-1"><span class="en-text">Fluent</span><span class="ja-text">流暢</span></div></div>
@@ -368,7 +381,7 @@ tailwind.config = {
 
 <!-- CERTIFICATIONS -->
 <section id="certifications" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
-  <div class="section-label mb-4 reveal"><span class="en-text">06 — Certifications</span><span class="ja-text">06 — 認定資格</span></div>
+  <div class="section-label mb-4 reveal"><span class="en-text">07 — Certifications</span><span class="ja-text">07 — 認定資格</span></div>
   <h2 class="section-title mb-16 reveal"><span class="en-text">Credentials &amp;<br/><em class="text-gold">Accolades</em></span><span class="ja-text">資格と<br/><em class="text-gold">実績</em></span></h2>
   <div class="grid md:grid-cols-2 gap-6">
     <div class="card p-10 reveal-left">
@@ -393,7 +406,7 @@ tailwind.config = {
 <!-- CONTACT -->
 <section id="contact" class="py-32 px-8 md:px-20 max-w-7xl mx-auto">
   <div class="gold-line mb-16 reveal"></div>
-  <div class="section-label mb-4 reveal"><span class="en-text">07 — Contact</span><span class="ja-text">07 — 連絡</span></div>
+  <div class="section-label mb-4 reveal"><span class="en-text">08 — Contact</span><span class="ja-text">08 — 連絡</span></div>
   <h2 class="section-title mb-8 reveal">
     <span class="en-text">Let's Build<br/>Something<br/><em class="text-gold">Remarkable</em></span>
     <span class="ja-text">一緒に<br/>素晴らしいものを<br/><em class="text-gold">作りましょう</em></span>
